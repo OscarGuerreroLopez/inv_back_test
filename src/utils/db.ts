@@ -6,26 +6,31 @@ import { products as originalProducts } from "../config/fakeDb/products.json";
 import { Inventory } from "../inventory";
 import { Products } from "../products";
 
-interface FakeDb {
-  inventory: Inventory;
-  products: Products;
-}
+const dbInstancesModels: Map<string, IObjectLiteral> = new Map();
 
-const fakeDb: FakeDb = {
-  inventory: originalInventory,
-  products: originalProducts,
+export const DbAdapter = (): {
+  collection: (collection: string) => IObjectLiteral | any;
+} => {
+  if (Array.from(dbInstancesModels.keys()).length === 0) {
+    dbInstancesModels.set(
+      "inventory",
+      fakeModel(originalInventory as Inventory),
+    );
+    dbInstancesModels.set("products", fakeModel(originalProducts as Products));
+  }
+
+  return {
+    collection: (collection: string) => {
+      const instanceModel = dbInstancesModels.get(collection);
+      if (!instanceModel) {
+        throw { message: "collection not found in db" };
+      }
+      return instanceModel;
+    },
+  };
 };
 
-export const DbAdapter = (): Map<string, any> => {
-  const dbInstances: Map<string, IObjectLiteral> = new Map();
-  dbInstances.set("inventory", fakeModel(fakeDb.inventory));
-  dbInstances.set("products", fakeModel(fakeDb.products));
-  console.log("@@@111", dbInstances);
-
-  return dbInstances;
-};
-
-const fakeModel = (collection: any) => {
+const fakeModel = (collection: unknown[]) => {
   const methods = {
     find: (where: IObjectLiteral) => {
       return _.where(collection, where);
