@@ -8,12 +8,10 @@ export const QueryMiddleware = (
   next: NextFunction,
 ): void => {
   try {
-    const limitQuery =
-      (request.query.limit as string) || (request.query.$limit as string);
-    const skipQuery =
-      (request.query.skip as string) || (request.query.$skip as string);
-    const sortQuery = request.query.sort || request.query.$sort;
-    const whereQuery = request.query.where || request.query.$where;
+    const limitQuery = request.query.limit as string;
+    const skipQuery = request.query.skip as string;
+    const sortQuery = request.query.sort;
+    const whereQuery = request.query.where;
 
     // 1. Convert limit and skip to number
     let limit = parseInt(limitQuery) || 25;
@@ -55,7 +53,7 @@ const sortValuesFunc = (
     );
 
     Object.keys(sort).forEach((item) => {
-      sortValues = { ...sortValues, ...JSON.parse(sort[item]) };
+      sortValues = { ...sortValues, ...sort[item] };
     });
   } else if (typeof sortQuery === "string") {
     sortValues = { [sortQuery]: -1 };
