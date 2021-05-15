@@ -9,4 +9,8 @@ declare global {
   interface IObjectLiteral {
     [key: string]: any;
   }
+
+  type Database = {
+    collection: (collection: string) => IObjectLiteral | never;
+  };
 }

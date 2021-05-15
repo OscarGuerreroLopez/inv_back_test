@@ -8,9 +8,7 @@ import { Products } from "../products";
 
 const dbInstancesModels: Map<string, IObjectLiteral> = new Map();
 
-export const DbAdapter = (): {
-  collection: (collection: string) => IObjectLiteral | any;
-} => {
+export const DbAdapter = (): Database => {
   if (Array.from(dbInstancesModels.keys()).length === 0) {
     dbInstancesModels.set(
       "inventory",
