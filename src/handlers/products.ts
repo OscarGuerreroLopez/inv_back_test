@@ -1,27 +1,25 @@
 import { Handler, Response, Request } from "express";
 import { validationResult } from "express-validator";
 import { Logger, SanitiseBody } from "../utils";
+import { ProductsList } from "../products";
 
 export const DeleteProduct: Handler = async (
   request: Request,
   response: Response,
 ) => {
-  //   const instance = DbAdapter();
-
-  //   const model = await instance.collection("products").find(request.where);
-  //   console.log("@@@111", model);
-
-  //   const model2 = await instance.collection("products").delete(request.where);
-  //   console.log("@@@222", model2);
-
   try {
     const errors = validationResult(request);
 
     if (!errors.isEmpty()) {
       throw errors;
     }
+    const where = (request.where as IObjectLiteral) || {};
+    const products = await ProductsList();
+
+    const removedProduct = await products.removeProduct(where);
+
     return response.send({
-      message: "Delete Product",
+      message: removedProduct,
       code: request.code,
     });
   } catch (error) {

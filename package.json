@@ -7,7 +7,7 @@
     "start": "node dist/src",
     "start:dev": "rm -rf node_modules && rm -rf package-lock.json && npm install & npm run start:tsnode",
     "build": "rimraf dist && tsc --build tsconfig.json",
-    "start:tsnode": "npm run lint:fix && npm run test && npm audit && ts-node-dev --respawn src/index.ts",
+    "start:tsnode": "npm run lint:fix && npm run test && ts-node-dev --respawn src/index.ts",
     "start:nodemon": "nodemon --exec ts-node src/index.ts",
     "test": "jest --detectOpenHandles --testTimeout=10000 --forceExit",
     "lint": "eslint . --ext .ts",

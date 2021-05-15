@@ -1,7 +1,17 @@
-export const ProductMethods = async (database: Database) => {
+export const ProductMethods = (
+  database: Database,
+): Readonly<{
+  remove: (collection: string, where?: IObjectLiteral) => Promise<boolean>;
+  find: (collection: string, where?: IObjectLiteral) => Promise<any>;
+}> => {
   const remove = async (collection: string, where: IObjectLiteral = {}) => {
     await database.collection(collection).delete(where);
+    return true;
   };
 
-  return Object.freeze({ remove });
+  const find = async (collection: string, where: IObjectLiteral = {}) => {
+    return await database.collection(collection).find(where);
+  };
+
+  return Object.freeze({ remove, find });
 };
