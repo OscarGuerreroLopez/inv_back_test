@@ -11,7 +11,7 @@ export const GetInventory: Handler = async (
 
     const inventory = await getInventoryService(where);
 
-    return response.send(inventory);
+    return response.status(200).send(inventory);
   } catch (error) {
     const status = error.status || 500;
     const message = error.message || "Error getting the Inventory";

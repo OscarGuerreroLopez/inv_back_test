@@ -11,6 +11,11 @@ export const DatabaseMethods = (
   ) => Promise<T>;
 }> => {
   const remove = async (collection: string, where: IObjectLiteral) => {
+    console.log(
+      "@@@remove",
+      await database.collection(collection).delete(where),
+    );
+
     return await database.collection(collection).delete(where);
   };
 
@@ -18,6 +23,8 @@ export const DatabaseMethods = (
     collection: string,
     where: IObjectLiteral = {},
   ): Promise<T> => {
+    console.log("@@@find", await database.collection(collection).find(where));
+
     return await database.collection(collection).find(where);
   };
 
@@ -25,6 +32,11 @@ export const DatabaseMethods = (
     collection: string,
     where: IObjectLiteral,
   ): Promise<T> => {
+    console.log(
+      "@@@findOne",
+      await database.collection(collection).findOne(where),
+    );
+
     return await database.collection(collection).findOne(where);
   };
 
@@ -36,6 +48,8 @@ export const DatabaseMethods = (
     const updatedRecord = await database
       .collection(collection)
       .updateOne(where, values);
+    console.log("@@@updateOne", updatedRecord);
+
     return updatedRecord;
   };
 

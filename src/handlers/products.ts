@@ -17,7 +17,7 @@ export const RemoveProduct: Handler = async (
 
     const removedProduct = await removeProductService(where);
 
-    return response.send({
+    return response.status(200).send({
       message: removedProduct,
       code: request.code,
     });
