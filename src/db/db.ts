@@ -1,5 +1,9 @@
 // fake implementation of a db adapter, for example mongo
-// with mongoose models
+// with mongoose models. I used underscore to make it feel a bit closer to mongoose
+// In a real app we would have some type of connection file
+// separated and injectable so we can mock it easier and also easier to change
+// databases without having to modify a lot of code, just this function
+
 import _ from "underscore";
 import { inventory as originalInventory } from "../config/fakeDb/inventory.json";
 import { products as originalProducts } from "../config/fakeDb/products.json";

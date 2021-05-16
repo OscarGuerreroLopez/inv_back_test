@@ -1,3 +1,10 @@
+// the intention of this file is to provide the rest of the app with data retrieval methods
+// the DB gets injected, so it is easier to mock for testing
+// also, the rest of the application does not care where the data is coming from
+// In this function I kind of mocked a mongoose way, but for example
+// if we were to change databases we just have to touch 2 files
+// the rest of the application will not be affected
+
 export const DatabaseMethods = (
   database: Database,
 ): Readonly<{

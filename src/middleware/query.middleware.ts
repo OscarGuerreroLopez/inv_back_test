@@ -1,3 +1,5 @@
+// I have used this middleware in other projects I have for pagination, sorting, and adding where clauses
+// in this test app I only use where, but since I already had it I just dump it in here, not like I over did it
 import { NextFunction, Request, Response } from "express";
 
 import { Logger } from "../utils/logger";
