@@ -6,7 +6,9 @@ import { products as originalProducts } from "../config/fakeDb/products.json";
 
 interface InstanceModel {
   find: <T>(where: Partial<T>) => T[];
-  delete: <T>(where: Partial<T>) => T[];
+  findOne: <T>(where: Partial<T>) => T;
+  delete: <T>(where: Partial<T>) => boolean;
+  updateOne: <T>(where: Partial<T>, values: IObjectLiteral) => T;
 }
 
 const dbInstancesModels: Map<string, Readonly<InstanceModel>> = new Map();
@@ -31,14 +33,34 @@ export const DbAdapter = (): Database => {
 const fakeModel = <T>(collection: T[]): Readonly<InstanceModel> => {
   const methods = {
     find: (where: Partial<T>) => {
-      return _.where(collection, where);
+      const result = _.where(collection, where);
+
+      return Object.assign([], result); // just to make sure noone alters the original value
+    },
+    findOne: (where: Partial<T>) => {
+      const result = _.findWhere(collection, where);
+
+      return Object.assign({}, result); // just to make sure noone alters the original value
     },
     delete: (where: Partial<T>) => {
       const existingRecord = _.findWhere(collection, where) as T;
 
+      if (!existingRecord) {
+        return false;
+      }
+
       collection = _.without(collection, existingRecord);
 
-      return collection;
+      return true;
+    },
+    updateOne: (where: Partial<T>, values: IObjectLiteral) => {
+      let item = _.findWhere(collection, where) as T;
+
+      item = { ...item, ...values };
+
+      const result = _.extend(_.findWhere(collection, where), item);
+
+      return result;
     },
   } as InstanceModel;
 
