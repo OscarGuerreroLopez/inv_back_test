@@ -1,5 +1,5 @@
 import { query } from "express-validator";
 
-export const DeleteProductValidator = [
+export const RemoveProductValidator = [
   query("where").exists().withMessage("Missing where query param"),
 ];

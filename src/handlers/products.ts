@@ -1,9 +1,9 @@
 import { Handler, Response, Request } from "express";
 import { validationResult } from "express-validator";
 import { Logger, SanitiseBody } from "../utils";
-import { RemoveProduct } from "../products";
+import { RemoveProduct as removeProductService } from "../products";
 
-export const DeleteProduct: Handler = async (
+export const RemoveProduct: Handler = async (
   request: Request,
   response: Response,
 ) => {
@@ -15,7 +15,7 @@ export const DeleteProduct: Handler = async (
     }
     const where = (request.where as IObjectLiteral) || {};
 
-    const removedProduct = await RemoveProduct(where);
+    const removedProduct = await removeProductService(where);
 
     return response.send({
       message: removedProduct,
