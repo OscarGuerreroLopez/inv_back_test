@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  inventory:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: inventory
+    container_name: inventory
+    restart: always
+    env_file: .env
+    ports:
+      - "5000:5000"
+
+    networks:
+      - api-inventory-network
+
+networks:
+  api-inventory-network:
+    driver: bridge
