@@ -3,24 +3,18 @@
 import _ from "underscore";
 import { inventory as originalInventory } from "../config/fakeDb/inventory.json";
 import { products as originalProducts } from "../config/fakeDb/products.json";
-import { Inventory } from "../inventory";
-import { Products } from "../products";
 
-const dbInstancesModels: Map<
-  string,
-  Readonly<{
-    find: <T>(where: Partial<T>) => T[];
-    delete: <T>(where: Partial<T>) => T[];
-  }>
-> = new Map();
+interface InstanceModel {
+  find: <T>(where: Partial<T>) => T[];
+  delete: <T>(where: Partial<T>) => T[];
+}
+
+const dbInstancesModels: Map<string, Readonly<InstanceModel>> = new Map();
 
 export const DbAdapter = (): Database => {
   if (Array.from(dbInstancesModels.keys()).length === 0) {
-    dbInstancesModels.set(
-      "inventory",
-      fakeModel(originalInventory as Inventory),
-    );
-    dbInstancesModels.set("products", fakeModel(originalProducts as Products));
+    dbInstancesModels.set("inventory", fakeModel(originalInventory));
+    dbInstancesModels.set("products", fakeModel(originalProducts));
   }
 
   return {
@@ -34,12 +28,7 @@ export const DbAdapter = (): Database => {
   };
 };
 
-const fakeModel = <T>(
-  collection: T[],
-): Readonly<{
-  find: <T>(where: Partial<T>) => T[];
-  delete: <T>(where: Partial<T>) => T[];
-}> => {
+const fakeModel = <T>(collection: T[]): Readonly<InstanceModel> => {
   const methods = {
     find: (where: Partial<T>) => {
       return _.where(collection, where);
@@ -51,10 +40,7 @@ const fakeModel = <T>(
 
       return collection;
     },
-  } as {
-    find: <T>(where: Partial<T>) => T[];
-    delete: <T>(where: Partial<T>) => T[];
-  };
+  } as InstanceModel;
 
-  return Object.freeze(methods); // so nobody can modify this
+  return methods;
 };

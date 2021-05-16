@@ -1,11 +1,6 @@
 export * from "./interfaces";
 export * from "./validators";
-
-import { DbAdapter } from "../utils";
-import { ProductMethods } from "./productMethods";
-
-const database: Database = DbAdapter();
-const databaseMethods = ProductMethods(database);
+import { DbMethods } from "../db";
 
 export const ProductsList = async (): Promise<
   Readonly<{
@@ -17,7 +12,7 @@ export const ProductsList = async (): Promise<
     const recordToRemove = await findProduct(where);
 
     if (recordToRemove.length !== 0) {
-      const removedRecord = await databaseMethods.remove("products", where);
+      const removedRecord = await DbMethods.remove("products", where);
 
       return removedRecord;
     }
@@ -25,7 +20,7 @@ export const ProductsList = async (): Promise<
   };
 
   const findProduct = async (where: IObjectLiteral) => {
-    const products = await databaseMethods.find("products", where);
+    const products = await DbMethods.find("products", where);
 
     return products;
   };

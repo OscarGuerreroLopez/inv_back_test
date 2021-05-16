@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { v4 as uuidv4 } from "uuid";
 
 import { Logger } from "../utils";
-import { DbAdapter } from "../utils/db";
+
 import { SanitiseBody } from "../utils";
 
 export const LoggerMiddleware = (

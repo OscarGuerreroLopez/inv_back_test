@@ -1,4 +1,4 @@
-export const ProductMethods = (
+export const DatabaseMethods = (
   database: Database,
 ): Readonly<{
   remove: (collection: string, where?: IObjectLiteral) => Promise<boolean>;
