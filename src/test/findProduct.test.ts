@@ -23,12 +23,7 @@ jest.mock("../db/databaseMethods.ts", () => {
   const DatabaseMethods = (): Readonly<{
     find: <T>(collection: string, where?: IObjectLiteral) => Promise<T>;
   }> => {
-    const find = async <T>(
-      collection: string,
-      where: IObjectLiteral = {},
-    ): Promise<T> => {
-      console.log(collection);
-      console.log(where);
+    const find = async <T>(): Promise<T> => {
       return data as unknown as T;
     };
 
