@@ -6,7 +6,7 @@ import { Products } from "./interfaces";
 export const RemoveProduct = async (
   where: IObjectLiteral,
 ): Promise<boolean> => {
-  const recordToRemove = await FindProduct(where);
+  const recordToRemove = await FindProduct<Products>(where);
 
   if (recordToRemove.length !== 0) {
     const removedRecord = await DbMethods.remove("products", where);
@@ -16,8 +16,8 @@ export const RemoveProduct = async (
   return false;
 };
 
-export const FindProduct = async (where: IObjectLiteral): Promise<any> => {
-  const products = await DbMethods.find<Products>("products", where);
+export const FindProduct = async <T>(where: IObjectLiteral): Promise<T> => {
+  const products = await DbMethods.find<T>("products", where);
 
   return products;
 };
