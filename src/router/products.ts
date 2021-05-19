@@ -1,6 +1,6 @@
 import { Router } from "express";
 import asyncHandler from "express-async-handler";
-import { RemoveProduct } from "../handlers/products";
+import { RemoveProduct, GetProducts } from "../handlers/products";
 import { QueryMiddleware } from "../middleware/query.middleware";
 import { RemoveProductValidator } from "../products";
 
@@ -12,5 +12,7 @@ router.delete(
   QueryMiddleware,
   asyncHandler(RemoveProduct),
 );
+
+router.get("/", QueryMiddleware, asyncHandler(GetProducts));
 
 export default router;

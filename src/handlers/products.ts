@@ -1,7 +1,10 @@
 import { Handler, Response, Request } from "express";
 import { validationResult } from "express-validator";
 import { Logger, SanitiseBody } from "../utils";
-import { RemoveProduct as removeProductService } from "../products";
+import {
+  RemoveProduct as removeProductService,
+  FindProduct,
+} from "../products";
 
 export const RemoveProduct: Handler = async (
   request: Request,
@@ -46,6 +49,35 @@ export const RemoveProduct: Handler = async (
 
     return response.status(status).send({
       message: "Cannot process your request, check logs",
+      errorCode: request.code,
+    });
+  }
+};
+
+export const GetProducts: Handler = async (
+  request: Request,
+  response: Response,
+) => {
+  try {
+    const where = (request.where as IObjectLiteral) || {};
+    const products = await FindProduct(where);
+
+    return response.status(200).send(products);
+  } catch (error) {
+    const status = error.status || 500;
+    const message = error.message || "Error getting the Inventory";
+
+    Logger.warn(message, {
+      identifier: "Getproducts handler",
+      status,
+      error,
+      code: request.code,
+      body: SanitiseBody(request.body),
+      headers: request.headers,
+    });
+
+    return response.status(status).send({
+      message,
       errorCode: request.code,
     });
   }
