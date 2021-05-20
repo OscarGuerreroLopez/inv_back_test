@@ -1,5 +1,4 @@
 import { DbMethods } from "../db";
-import { Products } from "./interfaces";
 import { UpdateInventoryItem, GetInventoryItem } from "../inventory";
 import { FindProduct } from "./findProduct";
 
@@ -7,7 +6,7 @@ export const RemoveProduct = async (
   where: IObjectLiteral,
 ): Promise<boolean> => {
   // first we find the product
-  const productToRemove = await FindProduct<Products>(where);
+  const productToRemove = await FindProduct(where);
 
   // if there is no product then don't do anything
   if (productToRemove.length === 0) {
