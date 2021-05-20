@@ -1,7 +1,39 @@
+import { Inventory } from "../inventory";
 import { DbMethods } from "../db";
+import { Products, Product } from "./interfaces";
 
-export const FindProduct = async <T>(where: IObjectLiteral): Promise<T> => {
-  const products = await DbMethods.find<T>("products", where);
+export const FindProduct = async (
+  where: IObjectLiteral,
+): Promise<IObjectLiteral[]> => {
+  const products = await DbMethods.find<Products>("products", where);
+  const inventory = await DbMethods.find<Inventory>("inventory", {});
 
-  return products;
+  let productItemsObject: IObjectLiteral[] = [];
+  let inventoryItemsObject: IObjectLiteral = {};
+
+  for (const inventoryItem of inventory) {
+    inventoryItemsObject = {
+      ...inventoryItemsObject,
+      ...{ [inventoryItem.art_id]: inventoryItem.name },
+    };
+  }
+
+  for (const product of products) {
+    productItemsObject = [
+      ...productItemsObject,
+      {
+        name: product.name,
+        contain_articles: product.contain_articles.map((article) => {
+          const { art_id, amount_of } = article;
+          return {
+            art_id,
+            name: inventoryItemsObject[art_id] || "",
+            amount_of,
+          };
+        }),
+      },
+    ];
+  }
+
+  return productItemsObject;
 };
