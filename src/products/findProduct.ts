@@ -1,6 +1,6 @@
 import { Inventory } from "../inventory";
 import { DbMethods } from "../db";
-import { Products, Product } from "./interfaces";
+import { Products } from "./interfaces";
 
 export const FindProduct = async (
   where: IObjectLiteral,

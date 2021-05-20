@@ -6,14 +6,17 @@ const data = [
       {
         art_id: "1",
         amount_of: "4",
+        name: "",
       },
       {
         art_id: "2",
         amount_of: "8",
+        name: "",
       },
       {
         art_id: "4",
         amount_of: "1",
+        name: "",
       },
     ],
   },
@@ -21,10 +24,10 @@ const data = [
 
 jest.mock("../db/databaseMethods.ts", () => {
   const DatabaseMethods = (): Readonly<{
-    find: <T>(collection: string, where?: IObjectLiteral) => Promise<T>;
+    find: (collection: string, where?: IObjectLiteral) => Promise<Products>;
   }> => {
-    const find = async <T>(): Promise<T> => {
-      return data as unknown as T;
+    const find = async (): Promise<Products> => {
+      return data as Products;
     };
 
     return { find };
@@ -36,8 +39,8 @@ jest.mock("../db/databaseMethods.ts", () => {
 describe("findProduct test", () => {
   it("should return true", async () => {
     try {
-      const result = await FindProduct<Products>({ name: "Dining Table" });
-      expect(result).toBe(data);
+      const result = await FindProduct({ name: "Dining Table" });
+      expect(result).toStrictEqual(data);
     } catch (error) {
       throw error;
     }

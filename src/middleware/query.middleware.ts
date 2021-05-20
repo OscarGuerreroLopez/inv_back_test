@@ -46,7 +46,7 @@ const sortValuesFunc = (
   if (typeof sortQuery === "object") {
     const sorts = Object.entries(sortQuery);
 
-    const sort: any = sorts.reduce(
+    const sort: IObjectLiteral = sorts.reduce(
       (obj, [key, order]) => ({
         ...obj,
         [key]: parseInt(order as string) || order || -1,
